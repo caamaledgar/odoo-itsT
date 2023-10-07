@@ -51,10 +51,17 @@
                                 </td>
                                 <td class="text-end">
                                     <span t-esc="m['qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;decimal_precision&quot;: &quot;Product Unit of Measure&quot;}"/>
-
-                                    <span t-esc="m['qty']/ line['mo_qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;decimal_precision&quot;: &quot;Product Unit of Measure&quot;}"/>
-
+                                    
                                     <span t-esc="m['product_id'].uom_id.name"/>
+                                    <!-- Porcentaje -->
+                                    <!-- 
+                                    <span t-esc=" line['mo_qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    <span t-esc=" line['qty_by_byproduct_w_costshare']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    <span t-esc="(m['qty']/ line['mo_qty'])*100" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    -->
+                                    
+                                    
+                                    
                                 </td>
                                 <td class="text-end">
                                     <span t-esc="m['cost'] / m['qty'] if m['qty'] else m['cost']" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: currency}"/>
@@ -181,12 +188,11 @@
                             <table class="table table-sm o_mrp_report_table">
                                 <tr t-if="line['mo_qty'] + len(line['qty_by_byproduct_w_costshare']) &gt; 1">
                                     <td class="text-end">
-                                        <strong>Total de Componentes </strong>
+                                        <strong>Total del Producto </strong>
                                     </td>
                                     <td class="text-end">
                                         <strong t-esc="line['mo_qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
                                     </td>
-                                    <!-- Cantidades Producidas --->
                                     <td class="text-end">
                                         <strong>Total Production Cost</strong>
                                     </td>
