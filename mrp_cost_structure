@@ -12,6 +12,7 @@
                 </t>
                 <t t-foreach="lines" t-as="line">
                     <t t-set="currency" t-value="line['currency']"/>
+                    <t t-set="tQty" t-value="0"/>
                     <t t-set="tot_scrap_cost" t-value="0.0"/>
 
                     <!-- Title -->
@@ -53,6 +54,12 @@
                                     <span t-esc="m['qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;decimal_precision&quot;: &quot;Product Unit of Measure&quot;}"/>
                                     
                                     <span t-esc="m['product_id'].uom_id.name"/>
+                                    <!--
+                                    <t t-set="tot_scrap_cost" t-value="tot_scrap_cost + scrap.stock_valuation_layer_ids.value"/>
+                                    -->
+                                    
+                                    <t t-set="tQty" t-value="tQty + m['qty']"/>
+
                                     <!-- Porcentaje -->
                                     <!-- 
                                     <span t-esc=" line['mo_qty']" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
@@ -188,6 +195,13 @@
                             <table class="table table-sm o_mrp_report_table">
                                 <tr t-if="line['mo_qty'] + len(line['qty_by_byproduct_w_costshare']) &gt; 1">
                                     <td class="text-end">
+                                        <strong>Materia Prima </strong>
+                                    </td>
+                                    <td class="text-end">
+                                        <strong t-esc=" tQty" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    </td>
+
+                                    <td class="text-end">
                                         <strong>Total del Producto </strong>
                                     </td>
                                     <td class="text-end">
@@ -219,9 +233,10 @@
                                     <th class="o_mrp_report_line_header"><span>Product</span></th>
                                     <th class="text-end o_mrp_report_line_header"><span>"% componente"</span></th>
 
-                                    <th class="text-end o_mrp_report_line_header"><span>Avg Cost of Components Per Unit</span></th>
+                                    <th class="text-end o_mrp_report_line_header"><span>Avg Cost of Components</span></th>
                                     <th class="text-end o_mrp_report_line_header"><span>Cantidades Producidas</span></th>
                                     <th class="o_mrp_report_line_header text-end" groups="uom.group_uom"><span>Unit of Measure</span></th>
+                                    <th class="text-end o_mrp_report_line_header"><span>% Eficiencia</span></th>
                                     <th class="text-end o_mrp_report_line_header"><span>"Costo Total por componente"</span></th>
                                 </tr>
                             </thead>
@@ -246,6 +261,12 @@
                                     <td groups="uom.group_uom" class="text-end">
                                         <span t-esc="line['product'].uom_id.name"/>
                                     </td>
+
+                                    <!-- Porcentaje Eficiencia -->
+                                    <td class="text-end">
+                                        <span t-esc="(line['mo_qty'] / tQty)*100 " t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    </td>
+
 
                                     <!-- Total -->
                                     <td class="text-end">
@@ -281,11 +302,16 @@
                                     <td groups="uom.group_uom" class="text-end">
                                         <span t-esc="byproduct[0].uom_id.name"/>
                                     </td>
+                                    <!-- Porcentaje Eficiencia -->
+                                    <td class="text-end">
+                                        <span t-esc="(byproduct[1] / tQty)*100 " t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    </td>
 
                                     <!-- Total -->
                                     <td class="text-end">
                                         <span t-esc="line['component_cost_by_product'][byproduct[0]]" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: currency}"/>
                                     </td>
+
 
 
                                     <td t-if="line['operations']" class="text-end">
