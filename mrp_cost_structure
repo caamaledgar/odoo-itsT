@@ -225,6 +225,7 @@
                             </table>
                         </div>
                     </div>
+                    <t t-set="pEfic" t-value="0"/>
                     <t t-if="line['qty_by_byproduct_w_costshare']">
                         <h3 class="o_mrp_header o_mrp_table_header">Cost Breakdown of Products</h3>
                         <table class="table table-sm o_mrp_report_table">
@@ -263,10 +264,15 @@
                                     </td>
 
                                     <!-- Porcentaje Eficiencia -->
+                                    <t t-set="pEfic" t-value="pEfic + (line['mo_qty'] / tQty)*100"/>
                                     <td class="text-end">
                                         <span t-esc="(line['mo_qty'] / tQty)*100 " t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
                                     </td>
-
+                                    <!-- 
+                                    <td class="text-end">
+                                        <span t-esc="pEfic" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    </td>
+                                    -->
 
                                     <!-- Total -->
                                     <td class="text-end">
@@ -303,6 +309,7 @@
                                         <span t-esc="byproduct[0].uom_id.name"/>
                                     </td>
                                     <!-- Porcentaje Eficiencia -->
+                                    <t t-set="pEfic" t-value="pEfic + (byproduct[1] / tQty)*100 "/>
                                     <td class="text-end">
                                         <span t-esc="(byproduct[1] / tQty)*100 " t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
                                     </td>
@@ -327,6 +334,9 @@
                         <div class="col-6 offset-6">
                             <table class="table table-sm o_mrp_report_table">
                                 <tr t-if="line['mo_qty'] + len(line['qty_by_byproduct_w_costshare']) &gt; 1">
+                                    <td class="text-end">
+                                        <span t-esc="pEfic" t-options="{&quot;widget&quot;: &quot;float&quot;, &quot;precision&quot;: 4}"/>
+                                    </td>
                                     <td class="text-end">
                                         <strong>Total Production Cost</strong>
                                     </td>
